@@ -1,10 +1,11 @@
 import pytest
+TEST_ID_FOR_PET = 578
 
 
 @pytest.fixture(scope="function")
 def body_post_request():
     body = {
-      "id": 578,
+      "id": TEST_ID_FOR_PET,
       "category": {
         "id": 423,
         "name": "string"
@@ -27,7 +28,7 @@ def body_post_request():
 @pytest.fixture(scope="function")
 def body_put_status_change_request():
     body = {
-      "id": 578,
+      "id": TEST_ID_FOR_PET,
       "category": {
         "id": 423,
         "name": "string"
@@ -50,7 +51,7 @@ def body_put_status_change_request():
 @pytest.fixture(scope="function")
 def body_put_status_change_request_wrong_status():
     body = {
-      "id": 578,
+      "id": TEST_ID_FOR_PET,
       "category": {
         "id": 423,
         "name": "string"
@@ -73,7 +74,7 @@ def body_put_status_change_request_wrong_status():
 @pytest.fixture(scope="function")
 def body_put_status_change_request_wrong_obj():
     body = {
-      "id": 578,
+      "id": TEST_ID_FOR_PET,
       "category": {
         "id": 423,
         "name": "string"
@@ -97,7 +98,7 @@ def body_put_status_change_request_wrong_obj():
 @pytest.fixture(scope="function")
 def body_put_status_change_request_wrong_id():
     body = {
-      "id": 453534654437363863567725622,
+      "id": -45352,
       "category": {
         "id": 423,
         "name": "string"

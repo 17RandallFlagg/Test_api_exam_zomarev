@@ -7,6 +7,6 @@ def validation(result: object, model: BaseModel):
     try:
         model.model_validate(result)
         return True
-    except ValidationError:
-        print("\n", "Unknown Status")
+    except ValidationError as e:
+        print("\n", "Unknown Pet Status\n", e.json())
         return False

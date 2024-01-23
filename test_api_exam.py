@@ -2,6 +2,7 @@ import allure
 import requests
 from models import Pet
 import request_validation
+from conftest import TEST_ID_FOR_PET
 
 URL = "https://petstore.swagger.io/v2"
 
@@ -11,6 +12,7 @@ URL = "https://petstore.swagger.io/v2"
 @allure.label("owner", "aleksander.zomarev@gcore.lu")
 @allure.epic("Test API")
 @allure.feature("Creation")
+@allure.description("Expected request")
 def test_post_request_good(body_post_request):
     response = requests.post(URL + "/pet", json=body_post_request)
     res_js = response.json()
@@ -24,6 +26,7 @@ def test_post_request_good(body_post_request):
 @allure.label("owner", "aleksander.zomarev@gcore.lu")
 @allure.epic("Test API")
 @allure.feature("Creation")
+@allure.description("Request with empty tuple")
 def test_post_request_bad():
     empty_tuple = []
     response = requests.post(URL + "/pet", empty_tuple)
@@ -36,6 +39,7 @@ def test_post_request_bad():
 @allure.label("owner", "aleksander.zomarev@gcore.lu")
 @allure.epic("Test API")
 @allure.feature("Creation")
+@allure.description("Total empty request")
 def test_post_empty_request():
     response = requests.post(URL + "/pet", None)
     with allure.step("Check Status code"):
@@ -47,6 +51,7 @@ def test_post_empty_request():
 @allure.label("owner", "aleksander.zomarev@gcore.lu")
 @allure.epic("Test API")
 @allure.feature("Change")
+@allure.description("Change status of pet to 'sold'")
 def test_put_status_request_good(body_put_status_change_request):
     response = requests.put(URL + "/pet", json=body_put_status_change_request)
     res_js = response.json()
@@ -60,6 +65,7 @@ def test_put_status_request_good(body_put_status_change_request):
 @allure.label("owner", "aleksander.zomarev@gcore.lu")
 @allure.epic("Test API")
 @allure.feature("Change")
+@allure.description("Change status of pet to 'lost'(non-existent status)")
 def test_put_status_request_bad(body_put_status_change_request_wrong_status):
     response = requests.put(URL + "/pet", json=body_put_status_change_request_wrong_status)
     with allure.step("Check Status code"):
@@ -67,11 +73,12 @@ def test_put_status_request_bad(body_put_status_change_request_wrong_status):
 
 
 @allure.title("Put request status code")
-@allure.tag("Change Status Request Non-exist Pet")
+@allure.tag("Change Status Request Non-exist Obj")
 @allure.label("owner", "aleksander.zomarev@gcore.lu")
 @allure.epic("Test API")
 @allure.feature("Change")
-def test_put_status_request_non_exist_pet(body_put_status_change_request_wrong_obj):
+@allure.description("Try to change non-existent object (second name)")
+def test_put_status_request_non_exist_obj(body_put_status_change_request_wrong_obj):
     response = requests.put(URL + "/pet", json=body_put_status_change_request_wrong_obj)
     with allure.step("Check Status code"):
         assert response.status_code == 404
@@ -82,6 +89,7 @@ def test_put_status_request_non_exist_pet(body_put_status_change_request_wrong_o
 @allure.label("owner", "aleksander.zomarev@gcore.lu")
 @allure.epic("Test API")
 @allure.feature("Change")
+@allure.description("Try to change pet with negative ID")
 def test_put_status_request_bad_id_pet(body_put_status_change_request_wrong_id):
     response = requests.put(URL + "/pet", json=body_put_status_change_request_wrong_id)
     with allure.step("Check Status code"):
@@ -93,6 +101,7 @@ def test_put_status_request_bad_id_pet(body_put_status_change_request_wrong_id):
 @allure.label("owner", "aleksander.zomarev@gcore.lu")
 @allure.epic("Test API")
 @allure.feature("Change")
+@allure.description("Search uploaded pet with status sold")
 def test_get_request_my_pet_is_sold():
     response = requests.get(URL + "/pet/findByStatus?status=sold")
     res_js = response.json()
@@ -103,7 +112,7 @@ def test_get_request_my_pet_is_sold():
     in_list_sold_my_pet = 0
     with allure.step("Check sold status for my pet"):
         for pet in response:
-            if pet[0] == 578:
+            if pet[0] == TEST_ID_FOR_PET:
                 in_list_sold_my_pet += 1
         assert in_list_sold_my_pet == 1
 
@@ -113,6 +122,7 @@ def test_get_request_my_pet_is_sold():
 @allure.label("owner", "aleksander.zomarev@gcore.lu")
 @allure.epic("Test API")
 @allure.feature("Change")
+@allure.description("Search pets with status non-existent status 'lost'")
 def test_get_request_lost():
     response = requests.get(URL + "/pet/findByStatus?status=lost")
     with allure.step("Check Status code"):
@@ -124,8 +134,9 @@ def test_get_request_lost():
 @allure.label("owner", "aleksander.zomarev@gcore.lu")
 @allure.epic("Test API")
 @allure.feature("Change")
+@allure.description("Delete uploaded pet")
 def test_delete_request():
-    response = requests.delete(URL + "/pet/578")
+    response = requests.delete(URL + "/pet/" + f"{TEST_ID_FOR_PET}")
     with allure.step("Check Status code"):
         assert response.status_code == 200
 
@@ -135,8 +146,9 @@ def test_delete_request():
 @allure.label("owner", "aleksander.zomarev@gcore.lu")
 @allure.epic("Test API")
 @allure.feature("Change")
+@allure.description("Try to delete non-existent pet")
 def test_delete_request_repeat():
-    response = requests.delete(URL + "/pet/578")
+    response = requests.delete(URL + "/pet/" + f"{TEST_ID_FOR_PET}")
     with allure.step("Check Status code"):
         assert response.status_code == 404
 
@@ -146,6 +158,7 @@ def test_delete_request_repeat():
 @allure.label("owner", "aleksander.zomarev@gcore.lu")
 @allure.epic("Test API")
 @allure.feature("Change")
+@allure.description("Try to delete a pet with incorrect ID")
 def test_delete_request_wrong_id():
     response = requests.delete(URL + "/pet/wcw")
     with allure.step("Check Status code"):
