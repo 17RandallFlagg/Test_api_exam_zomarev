@@ -73,12 +73,13 @@ def body_put_status_change_request_wrong_status():
 @pytest.fixture(scope="function")
 def body_put_status_change_request_wrong_obj():
     body = {
-      "id": 5786700000000000000000000000000000000045,
+      "id": 578,
       "category": {
         "id": 423,
         "name": "string"
       },
       "name": "doggie",
+      "second name": "buba",
       "photoUrls": [
         "string"
       ],
@@ -96,7 +97,7 @@ def body_put_status_change_request_wrong_obj():
 @pytest.fixture(scope="function")
 def body_put_status_change_request_wrong_id():
     body = {
-      "id": "5wq8",
+      "id": 453534654437363863567725622,
       "category": {
         "id": 423,
         "name": "string"
