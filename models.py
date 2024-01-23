@@ -1,24 +1,6 @@
-from pydantic import BaseModel, Field
-
-class PetPost(BaseModel):
-    body = {
-      "id": 0,
-      "category": {
-        "id": 0,
-        "name": "string"
-      },
-      "name": "doggie",
-      "photoUrls": [
-        "string"
-      ],
-      "tags": [
-        {
-          "id": 0,
-          "name": "string"
-        }
-      ],
-      "status": "available"
-    }
+from pydantic import BaseModel, ConfigDict
+from typing import Optional
+import enum_statuses
 
 
 class Tag(BaseModel):
@@ -32,9 +14,11 @@ class Category(BaseModel):
 
 
 class Pet(BaseModel):
-    id: int
-    category: Category
-    name: str = Field(alias="SuperDog")
-    photoUrls: str
-    tags: Tag
-    status: str = Field(alias="available")
+    model_config = ConfigDict(use_enum_values=True)
+
+    id: Optional[int] = None
+    category: Optional[Category] = None
+    name: Optional[str] = None
+    photoUrls: Optional[list[str]] = None
+    tags: Optional[list[Tag]] = None
+    status: enum_statuses.EnumStatuses

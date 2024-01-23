@@ -1,5 +1,7 @@
+from enum import Enum
 
-class EnumStatuses:
+
+class EnumStatuses(Enum):
     available = "available"
     pending = "pending"
     sold = "sold"
